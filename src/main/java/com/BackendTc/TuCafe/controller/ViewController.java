@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("tuCafe/v1/view")
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin(origins = "https://fron-cafe-v-4.vercel.app/")
 public class ViewController {
 
     private final ViewService viewService;
