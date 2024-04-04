@@ -24,7 +24,11 @@ public class AdminController {
     //Controlador finalizado para DESPLEGAR Y PRESENTAR
     @PostMapping(value = "login")
     public ResponseEntity<TokenResponse> loginBusiness(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(adminService.loginAdmin(request));
+        Admin admin = adminRepository.findByEmail(request.getEmail());
+        if(!admin.getPassword().equals(request.getPassword())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(adminService.loginAdmin(request, admin));
     }
 
     @GetMapping("/getAdmin")

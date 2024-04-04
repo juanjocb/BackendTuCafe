@@ -20,13 +20,10 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
     private final BusinessRepository businessRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
 
-    public TokenResponse loginAdmin(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        Admin admin = adminRepository.findByEmail(request.getEmail());
+    public TokenResponse loginAdmin(LoginRequest request, Admin admin) {
         String token = tokenUtils.getTokenAdmin(admin);
         return TokenResponse.builder()
                 .token(token)
