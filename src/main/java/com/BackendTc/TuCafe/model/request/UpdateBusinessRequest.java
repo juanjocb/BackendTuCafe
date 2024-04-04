@@ -32,4 +32,8 @@ public class UpdateBusinessRequest {
     private String city;
     private LocalTime start_hour;
     private LocalTime finish_hour;
+    private String facebook;
+    private String instagram;
+    private String whatssap;
+    private String menu;
 }
