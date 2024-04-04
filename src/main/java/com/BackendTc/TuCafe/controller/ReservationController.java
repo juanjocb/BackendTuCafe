@@ -21,7 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("tuCafe/v1/reservation")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://fron-cafe-v-4.vercel.app/")
+@CrossOrigin(origins = "*")
 public class ReservationController {
 
     private final ReservationService reservationService;

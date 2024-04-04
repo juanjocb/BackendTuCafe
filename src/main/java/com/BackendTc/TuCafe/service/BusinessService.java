@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BusinessService {
 
-//    private final AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
     private final BusinessRepository businessRepository;
     private final ReservationRepository reservationRepository;
     private final CategoryRepository categoryRepository;
@@ -47,10 +47,10 @@ public class BusinessService {
             Business business = Business.builder()
                     .name(request.getName())
                     .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
+                    .password(request.getPassword())
                     .role("establecimiento")
                     .status(false)
-//                    .idAdmin(adminRepository.findById(1L))
+                    .idAdmin(adminRepository.findById(1L))
                     .category(categoryRepository.findByName(request.getCategory()))
                     .build();
 
@@ -68,9 +68,7 @@ public class BusinessService {
     }
 
     //Login Business terminado y listo para EXPONER
-    public TokenResponse loginBusiness(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        Business business = businessRepository.findByEmail(request.getEmail());
+    public TokenResponse loginBusiness(LoginRequest request, Business business) {
         String token = tokenUtils.getTokenBusiness(business);
         return TokenResponse.builder()
                 .token(token)
@@ -212,16 +210,15 @@ public class BusinessService {
 
     public ResponseEntity<String> changeBusinessPassword(Long idBusiness, ChangePasswordRequest request) {
         Optional<Business> optionalBusiness = businessRepository.findById(idBusiness);
+        System.out.println(request);
 
         if (optionalBusiness.isPresent()) {
             Business business = optionalBusiness.get();
+            System.out.println(business.getPassword());
 
-            if (passwordEncoder.matches(request.getCurrentPassword(), business.getPassword())) {
-                // Encriptar la nueva contraseña
-                String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
-                // Actualizar la contraseña en la entidad del negocio
+            if (request.getCurrentPassword().equals(business.getPassword())) {
+                String newPasswordEncoded = request.getNewPassword();
                 business.setPassword(newPasswordEncoded);
-                // Guardar el negocio actualizado en la base de datos
                 businessRepository.save(business);
                 return ResponseEntity.ok("Contraseña cambiada exitosamente");
             } else {

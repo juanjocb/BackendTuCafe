@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("tuCafe/v1/admin")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://fron-cafe-v-4.vercel.app/")
+@CrossOrigin(origins = "*")
 public class AdminController {
 
     private final AdminService adminService;

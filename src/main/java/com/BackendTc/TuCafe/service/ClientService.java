@@ -1,7 +1,9 @@
 package com.BackendTc.TuCafe.service;
 
 import com.BackendTc.TuCafe.controller.response.TokenResponse;
+import com.BackendTc.TuCafe.model.Business;
 import com.BackendTc.TuCafe.model.Client;
+import com.BackendTc.TuCafe.model.request.ChangePasswordRequest;
 import com.BackendTc.TuCafe.model.request.LoginRequest;
 import com.BackendTc.TuCafe.model.request.RegisterRequest;
 import com.BackendTc.TuCafe.model.request.UpdateClientRequest;
@@ -20,6 +22,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +47,7 @@ public class ClientService{
             Client client = Client.builder()
                     .name(request.getName())
                     .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
+                    .password(request.getPassword())
                     .role("cliente")
                     .build();
 
@@ -59,9 +63,7 @@ public class ClientService{
     }
 
     //Login listo para DESPLEGAR Y PRESENTAR
-    public TokenResponse loginCliente(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        Client client = clientRepository.findByEmail(request.getEmail());
+    public TokenResponse loginCliente(LoginRequest request, Client client) {
         String token = tokenUtils.getTokenClient(client);
         return TokenResponse.builder()
                 .token(token)
@@ -81,7 +83,7 @@ public class ClientService{
             }
 
             if (request.getPassword() != null){
-                String newPassowrd = passwordEncoder.encode(request.getPassword());
+                String newPassowrd = request.getPassword();
                 client.setPassword(newPassowrd);
             }
 
@@ -155,5 +157,27 @@ public class ClientService{
     public Client findClientById(Long idClient) {
         return clientRepository.findById(idClient)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + idClient));
+    }
+
+    public ResponseEntity<String> changeClientPassword(Long idClient, ChangePasswordRequest request) {
+        Optional<Client> optionalClient = clientRepository.findById(idClient);
+        System.out.println(request);
+
+        if (optionalClient.isPresent()) {
+            Client client = optionalClient.get();
+            System.out.println(client.getPassword());
+
+            if (request.getCurrentPassword().equals(client.getPassword())) {
+                String newPasswordEncoded = request.getNewPassword();
+                client.setPassword(newPasswordEncoded);
+                System.out.println("got here");
+                clientRepository.save(client);
+                return ResponseEntity.ok("Contraseña cambiada exitosamente");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La contraseña actual no es correcta");
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.BackendTc.TuCafe.controller;
 import com.BackendTc.TuCafe.controller.response.TokenResponse;
 import com.BackendTc.TuCafe.model.Business;
 import com.BackendTc.TuCafe.model.request.*;
+import com.BackendTc.TuCafe.repository.BusinessRepository;
 import com.BackendTc.TuCafe.repository.ReservationRepository;
 import com.BackendTc.TuCafe.service.BusinessService;
 import com.BackendTc.TuCafe.service.ImageService;
@@ -17,11 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("tuCafe/v1/business")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://fron-cafe-v-4.vercel.app/")
+@CrossOrigin(origins = "*")
 public class BusinessController {
 
     private final BusinessService businessService;
     private final ReservationRepository reservationRepository;
+    private final BusinessRepository businessRepository;
     private final ImageService imageService;
 
 
@@ -34,7 +36,11 @@ public class BusinessController {
     //Controlador finalizado para DESPLEGAR Y PRESENTAR
     @PostMapping(value = "login")
     public ResponseEntity<TokenResponse> loginBusiness(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(businessService.loginBusiness(request));
+        Business business = businessRepository.findByEmail(request.getEmail());
+        if(!business.getPassword().equals(request.getPassword())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(businessService.loginBusiness(request, business));
     }
 
     @PutMapping(value = "{idBusiness}")
