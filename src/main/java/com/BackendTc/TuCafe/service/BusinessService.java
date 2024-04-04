@@ -115,18 +115,6 @@ public class BusinessService {
             if (request.getFinish_hour() != null){
                 business.setFinish_hour(request.getFinish_hour());
             }
-            if (request.getMenu() != null){
-                business.setMenu(request.getMenu());
-            }
-            if (request.getFacebook() != null){
-                business.setFacebook(request.getFacebook());
-            }
-            if (request.getInstagram() != null){
-                business.setInstagram(request.getInstagram());
-            }
-            if (request.getWhatssap() != null){
-                business.setWhatssap(request.getWhatssap());
-            }
 
             businessRepository.save(business);
 
