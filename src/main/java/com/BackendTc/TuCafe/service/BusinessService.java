@@ -147,9 +147,9 @@ public class BusinessService {
                 "<div style='text-align: center; color: black;'>" +
                 "<p style='font-size: 24px; font-weight: bold; color: black;'>¡Hola " + name + ",!</p><br>" +
                 "<p style='font-size: 16px; color: black;'>¡Bienvenido a TuCafe!</p>"+
-                "<p style='font-size: 14px; color: black;'>Gracias por registrarte en TuCafe! Ahora podrás disfrutar de esta maravillosa experiencia.</p>" +
+                "<p style='font-size: 14px; color: black;'>Gracias por registrarte en TuCafe! Ahora estas en estado inactivo.</p>" +
                 "<img src='cid:logo' width='150' style='border: 3px solid #663300; border-radius: 50%;'>" +
-                "<p style='font-size: 14px; color: white;'>Queremos agradecerte por registrarte con nosotros y confiar en nuestra plataforma para disfrutar de una experiencia única. Estamos emocionados de tenerte a bordo y estamos seguros de que te encantará lo que tenemos preparado para ti." +
+                "<p style='font-size: 14px; color: white;'>Para cambiar el estaod de tu establecimiento te invitamos a loguearte y terminar de llenar tus datos en el perfil para agilizar este proceso." +
                 "<br>" +
                 "¡Gracias por unirte a nuestra comunidad de amantes del café!" +
                 "<br>" +
